@@ -3,19 +3,21 @@
 
 dr_triprsty=50;
 dr_jedenprst=25;
-dr_clanek=25;
-dr_tloustka=4;
+dr_clanek=17;
+dr_tloustka=2.7;
 dr_r=dr_tloustka +dr_jedenprst/2;
 dr_stredy=(dr_triprsty - dr_jedenprst)/2;
 //držátko
 
-ka_delka=150;
-ka_na_sirka=30;
+ka_delka=120;
+ka_na_sirka=26;
 ka_na_vyska=12;
-ka_stena=2;
+ka_stena=1.2;
 ka_cil=5;
-ka_rezonator=12;
-ka_stred=4;
+ka_rezonator=10.7;
+ka_stred=ka_rezonator -ka_stena- ka_stena;
+ka_plosina=7;
+ka_zasun=33;
 
 
 module drzatko() {
@@ -42,7 +44,7 @@ union(){
 linear_extrude(height = ka_delka, center = true, convexity = 10, scale=[(ka_na_sirka+ka_stena)/(ka_cil+ka_stena/2)/2,(ka_na_vyska+ka_stena)/(ka_cil+ka_stena/2)/2], $fn=30)
  circle(r = ka_cil+ka_stena);
     
-    rotate  ([90,0,0])cylinder(6*ka_stena,ka_rezonator,ka_rezonator);
+    rotate  ([90,0,0])cylinder(8*ka_stena,ka_rezonator,ka_rezonator);
     
     }
 union(){
@@ -50,7 +52,7 @@ linear_extrude(height = ka_delka+.2, center = true, convexity = 10, scale=[ka_na
  circle(r = ka_cil);
     rotate  ([90,0,0])cylinder(11,ka_stred,ka_stred);
     
-   translate([0,-(ka_na_vyska+ka_cil)/2] )rotate  ([90,0,0])cylinder(6*ka_stena,ka_rezonator-ka_stena,ka_rezonator-ka_stena);
+   translate([0,-ka_plosina] )rotate  ([90,0,0])cylinder(6*ka_stena,ka_rezonator-ka_stena,ka_rezonator-ka_stena);
 }
 
 }
@@ -86,15 +88,16 @@ sphere(d=8, $fn=64);
 sphere(d=6, $fn=64);    
 }
     
-translate([0,0,-15]) cylinder(h=12,d=1.5);
+//držak kolečka
+ translate([0,0,0]) rotate([0,90,0])cylinder(h=12,d=1.5);
 }
 
 
- translate([10,20,0]) rotate([0,0,90]) drzatko();
-kazoo();
+ translate([10,21,0]) rotate([0,0,90]) drzatko();
+translate([0,0,ka_zasun])rotate([0,180,0]) kazoo();
 
 
-translate([30,-5,0])rotate ([180,0,0]) union(){
+translate([24,-2,0])rotate ([180,90,0]) scale([0.7,0.7,0.7]) union(){
 difference() {
     body();
     cylinder (h=26,d=26, center=true);
@@ -107,7 +110,7 @@ difference() {
 ball();}
 
 
-translate([40,50,(ka_delka/2)- ka_stena*3]) washer();
+translate([40,50,(-(ka_delka/2)- ka_stena*3 )+ ka_zasun+6] ) washer();
 
 
 
